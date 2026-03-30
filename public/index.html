@@ -456,7 +456,7 @@ const BASE = window.location.origin;
 const API = {
   gamma:  (path='', qs='') => `${BASE}/api/gamma${path}${qs}`,
   clob:   (path='', qs='') => `${BASE}/api/clob${path}${qs}`,
-  binance:(path='', qs='') => `${BASE}/api/binance${path}${qs}`,
+  btc:    (path='', qs='') => `${BASE}/api/btc${path}${qs}`,
 };
 const CHAIN_ID = 137;
 const CTF_EXCHANGE = '0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E';
@@ -568,8 +568,8 @@ function renderBtcHistory(){
 async function btcRefresh(){
   try{
     const [kR,tR]=await Promise.all([
-      fetch(API.binance('/klines','?symbol=BTCUSDT&interval=1m&limit=100')),
-      fetch(API.binance('/ticker/24hr','?symbol=BTCUSDT'))
+      fetch(API.btc('/klines','?limit=100')),
+      fetch(API.btc('/ticker/24hr',''))
     ]);
     if(!kR.ok||!tR.ok)throw new Error('Binance unreachable');
     const klines=await kR.json(),ticker=await tR.json();
