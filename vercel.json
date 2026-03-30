@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/gamma/:path*", "destination": "/api/gamma" },
-    { "source": "/api/clob/:path*",  "destination": "/api/clob"  },
-    { "source": "/api/binance/:path*", "destination": "/api/binance" }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
