@@ -511,10 +511,10 @@ function renderBtcInds(r){
 async function btcRefresh(){
   try{
     // Use Polymarket data only - no external price feed
-    const resp=await fetch(API.gamma('/markets','?active=true&closed=false&limit=100'));
+    const resp=await fetch(API.clob('/sampling-markets',''));
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const data=await resp.json();
-    const markets=Array.isArray(data)?data:(data.markets||data.data||[]);
+    const markets=Array.isArray(data)?data:(data.data||data.markets||[]);
 
     // Filter crypto/BTC markets
     const crypto=markets.filter(m=>{
@@ -641,10 +641,10 @@ async function hmacSign(secret,message){try{const enc=new TextEncoder(),key=awai
 async function loadMarkets(){
   document.getElementById('markets-list').innerHTML='<div style="padding:12px;text-align:center;color:var(--text);"><div class="spinner"></div></div>';
   try{
-    const resp=await fetch(API.gamma('/markets','?active=true&closed=false&limit=100'));
+    const resp=await fetch(API.clob('/sampling-markets',''));
     if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
     const data=await resp.json();
-    allMarkets=(Array.isArray(data)?data:(data.markets||data.data||[])).filter(m=>m.clobTokenIds||m.tokens||m.id);
+    allMarkets=(Array.isArray(data)?data:(data.data||data.markets||[])).filter(m=>m.tokens||m.clobTokenIds||m.question);
     document.getElementById('mkt-count').textContent=allMarkets.length+' MKTS';
     log(`${allMarkets.length} Märkte geladen`,'ok');
     await enrichMarkets(allMarkets.slice(0,20));
