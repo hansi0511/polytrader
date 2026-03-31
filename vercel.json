@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/handler?_path=$1" },
+    { "handle": "filesystem" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
