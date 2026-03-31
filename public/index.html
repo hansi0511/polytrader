@@ -682,7 +682,7 @@ async function loadMarkets(){
     const resp=await fetch(API.gamma('/markets','?active=true&closed=false&limit=100'));
     if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
     const data=await resp.json();
-    allMarkets=(Array.isArray(data)?data:(data.markets||data.data||[])).filter(m=>m.tokens||m.clobTokenIds);
+    allMarkets=(Array.isArray(data)?data:(data.markets||data.data||[])).filter(m=>m.clobTokenIds||m.tokens||m.id);
     document.getElementById('mkt-count').textContent=allMarkets.length+' MKTS';
     log(`${allMarkets.length} Märkte geladen`,'ok');
     await enrichMarkets(allMarkets.slice(0,20));
@@ -697,7 +697,7 @@ async function enrichMarkets(ms){
 }
 
 async function fetchMid(id){try{const r=await fetch(API.clob('/midpoint',`?token_id=${id}`));if(!r.ok)return null;const d=await r.json();return parseFloat(d.mid||d.midpoint||0);}catch{return null;}}
-function getIds(m){if(m.clobTokenIds)return m.clobTokenIds;if(m.tokens)return m.tokens.map(t=>t.token_id||t.tokenId||t.id).filter(Boolean);return[];}
+function getIds(m){if(m.clobTokenIds){const ids=typeof m.clobTokenIds==="string"?JSON.parse(m.clobTokenIds):m.clobTokenIds;return Array.isArray(ids)?ids:[];}if(m.tokens)return m.tokens.map(t=>t.token_id||t.tokenId||t.id).filter(Boolean);return[];}
 
 function getFiltered(){
   const search=document.getElementById('search-input').value.toLowerCase();
